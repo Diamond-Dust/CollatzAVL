@@ -15,6 +15,7 @@ class AVL{
 	public:
 		AVL();
 		void Add(unsigned int num, unsigned int index);
+		bool Is();
 		unsigned int GetMax();
 		unsigned int GetMin();
 		unsigned int PopMax();

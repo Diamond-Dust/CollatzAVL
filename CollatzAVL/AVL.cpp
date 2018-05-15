@@ -322,6 +322,10 @@ void AVL::Add(unsigned int num, unsigned int index) {
 	}
 }
 
+bool AVL::Is() {
+	return (ROOT == nullptr) ? false : true;
+}
+
 unsigned int AVL::GetMax() {
 	Node* currentNode = ROOT;
 	if (currentNode == nullptr)
@@ -354,18 +358,22 @@ unsigned int AVL::PopMax() {
 		currentNode = currentNode->GetRightChild();
 	if (currentNode->GetSize() < 2)
 	{
+		this->BalanceRemoving(currentNode);
+		leftChildNode = currentNode->GetLeftChild();
 		if (currentNode == ROOT)
-			this->BalanceRemoving(currentNode);
+		{
+			ROOT = leftChildNode;
+			if (leftChildNode != nullptr)
+				leftChildNode->SetParent(nullptr);
+		}
 		else
 		{
-			this->BalanceRemoving(currentNode);
-			leftChildNode = currentNode->GetLeftChild();
 			if (leftChildNode != nullptr)
 				leftChildNode->SetParent(currentNode->GetParent());
 			currentNode->GetParent()->SetRightChild(leftChildNode);
 		}
 		index = currentNode->Pop();
-		//delete currentNode;
+		delete currentNode;
 	}
 	else
 		index = currentNode->Pop();
@@ -380,18 +388,22 @@ unsigned int AVL::PopMin() {
 		currentNode = currentNode->GetLeftChild();
 	if (currentNode->GetSize() < 2)
 	{
+		this->BalanceRemoving(currentNode);
+		rightChildNode = currentNode->GetRightChild();
 		if (currentNode == ROOT)
-			this->BalanceRemoving(currentNode);
+		{
+			ROOT = rightChildNode;
+			if (rightChildNode != nullptr)
+				rightChildNode->SetParent(nullptr);
+		}
 		else
 		{
-			this->BalanceRemoving(currentNode);
-			rightChildNode = currentNode->GetRightChild();
-			if(rightChildNode != nullptr)
+			if (rightChildNode != nullptr)
 				rightChildNode->SetParent(currentNode->GetParent());
 			currentNode->GetParent()->SetLeftChild(rightChildNode);
 		}
 		index = currentNode->Pop();
-		//delete currentNode;
+		delete currentNode;
 	}
 	else
 		index = currentNode->Pop();

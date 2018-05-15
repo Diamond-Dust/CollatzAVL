@@ -29,10 +29,14 @@ int main() {
 	for (unsigned int i = 0; i < queries; i++)
 	{
 		scanf("%u %c", &times, &charter);
+		if (!AVLTree.Is())
+			break;
 		if (charter == 'l')
 		{
 			for (unsigned int j = 0; j < times; j++)
 			{
+				if (!AVLTree.Is())
+					break;
 				currentQNode = AVLTree.PopMax();
 				if (nums[currentQNode] % 2 == 0)
 				{
@@ -42,10 +46,12 @@ int main() {
 				}
 				else
 				{
-					nums[currentQNode] *= 3;
-					nums[currentQNode]++;
 					if (nums[currentQNode] < MAXNUM)
+					{
+						nums[currentQNode] *= 3;
+						nums[currentQNode]++;
 						AVLTree.Add(nums[currentQNode], currentQNode);
+					}
 					else
 						nums[currentQNode] = 0;
 				}
@@ -55,6 +61,8 @@ int main() {
 		{
 			for (unsigned int j = 0; j < times; j++)
 			{
+				if (!AVLTree.Is())
+					break;
 				currentQNode = AVLTree.PopMin();
 				if (nums[currentQNode] % 2 == 0)
 				{
