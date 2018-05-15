@@ -21,9 +21,6 @@
     <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DLL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PQ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
