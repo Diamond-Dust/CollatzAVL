@@ -30,25 +30,16 @@ Node & Node::operator=(const Node & right) {
 }
 
 bool Node::operator>(const Node & right) {
-	if (this->Value > right.Value)
-		return true;
-	else
-		return false;
+	return (this->Value > right.Value);
 }
 
 bool Node::operator==(const Node & right)
 {
-	if (this->Value == right.Value)
-		return true;
-	else
-		return false;
+	return (this->Value == right.Value);
 }
 
 bool Node::operator<(const Node & right) {
-	if (this->Value < right.Value)
-		return true;
-	else
-		return false;
+	return (this->Value < right.Value);
 }
 
 void Node::SetParent(Node * parent) {

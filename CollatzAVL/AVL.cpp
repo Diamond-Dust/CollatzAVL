@@ -3,13 +3,13 @@
 
 
 Node* AVL::LeftRotate(Node * upperPlace, Node* place) {
-	Node* swapper = place->GetLeftChild();
-	upperPlace->SetRightChild(swapper);
+	Node* swapper = place->LeftChild;
+	upperPlace->RightChild = swapper;
 	if(swapper != nullptr)
-		swapper->SetParent(upperPlace);
-	place->SetLeftChild(upperPlace);
-	place->SetParent(upperPlace->GetParent());
-	upperPlace->SetParent(place);
+		swapper->Parent = upperPlace;
+	place->LeftChild = upperPlace;
+	place->Parent = upperPlace->Parent;
+	upperPlace->Parent = place;
 	if (place->GetBalance() == 0)
 	{
 		upperPlace->SetBalance(1);
@@ -24,13 +24,13 @@ Node* AVL::LeftRotate(Node * upperPlace, Node* place) {
 }
 
 Node* AVL::RightRotate(Node * upperPlace, Node* place) {
-	Node* swapper = place->GetRightChild();
-	upperPlace->SetLeftChild(swapper);
+	Node* swapper = place->RightChild;
+	upperPlace->LeftChild = swapper;
 	if (swapper != nullptr)
-		swapper->SetParent(upperPlace);
-	place->SetRightChild(upperPlace);
-	place->SetParent(upperPlace->GetParent());
-	upperPlace->SetParent(place);
+		swapper->Parent = upperPlace;
+	place->RightChild = upperPlace;
+	place->Parent = upperPlace->Parent;
+	upperPlace->Parent = place;
 	if (place->GetBalance() == 0)
 	{
 		upperPlace->SetBalance(-1);
@@ -45,22 +45,22 @@ Node* AVL::RightRotate(Node * upperPlace, Node* place) {
 }
 
 Node * AVL::RightLeftRotate(Node * upperPlace, Node * place) {
-	Node* lowerPlace = place->GetLeftChild();
-	Node* rightLowerPlace = lowerPlace->GetRightChild();
-	place->SetLeftChild(rightLowerPlace);
+	Node* lowerPlace = place->LeftChild;
+	Node* rightLowerPlace = lowerPlace->RightChild;
+	place->LeftChild = rightLowerPlace;
 	if (rightLowerPlace != nullptr)
-		rightLowerPlace->SetParent(place);
-	lowerPlace->SetRightChild(place);
-	place->SetParent(lowerPlace);
-	Node* leftLowerPlace = lowerPlace->GetLeftChild();
-	upperPlace->SetRightChild(leftLowerPlace);
+		rightLowerPlace->Parent = place;
+	lowerPlace->RightChild = place;
+	place->Parent = lowerPlace;
+	Node* leftLowerPlace = lowerPlace->LeftChild;
+	upperPlace->RightChild = leftLowerPlace;
 	if (leftLowerPlace != nullptr)
-		leftLowerPlace->SetParent(upperPlace);
-	lowerPlace->SetLeftChild(upperPlace);
-	lowerPlace->SetParent(upperPlace->GetParent());
-	if (lowerPlace->GetParent() == nullptr)
+		leftLowerPlace->Parent = upperPlace;
+	lowerPlace->LeftChild = upperPlace;
+	lowerPlace->Parent = upperPlace->Parent;
+	if (lowerPlace->Parent == nullptr)
 		ROOT = lowerPlace;
-	upperPlace->SetParent(lowerPlace);
+	upperPlace->Parent = lowerPlace;
 
 	if (lowerPlace->GetBalance() > 0) 
 	{ 
@@ -83,22 +83,22 @@ Node * AVL::RightLeftRotate(Node * upperPlace, Node * place) {
 }
 
 Node * AVL::LeftRightRotate(Node * upperPlace, Node* place) {
-	Node* lowerPlace = place->GetRightChild();
-	Node* leftLowerPlace = lowerPlace->GetLeftChild();
-	place->SetRightChild(leftLowerPlace);
+	Node* lowerPlace = place->RightChild;
+	Node* leftLowerPlace = lowerPlace->LeftChild;
+	place->RightChild = leftLowerPlace;
 	if (leftLowerPlace != nullptr)
-		leftLowerPlace->SetParent(place);
-	lowerPlace->SetLeftChild(place);
-	place->SetParent(lowerPlace);
-	Node* rightLowerPlace = lowerPlace->GetRightChild();
-	upperPlace->SetLeftChild(rightLowerPlace);
+		leftLowerPlace->Parent = place;
+	lowerPlace->LeftChild = place;
+	place->Parent = lowerPlace;
+	Node* rightLowerPlace = lowerPlace->RightChild;
+	upperPlace->LeftChild = rightLowerPlace;
 	if (rightLowerPlace != nullptr)
-		rightLowerPlace->SetParent(upperPlace);
-	lowerPlace->SetRightChild(upperPlace);
-	lowerPlace->SetParent(upperPlace->GetParent());
-	if (lowerPlace->GetParent() == nullptr)
+		rightLowerPlace->Parent = upperPlace;
+	lowerPlace->RightChild = upperPlace;
+	lowerPlace->Parent = upperPlace->Parent;
+	if (lowerPlace->Parent == nullptr)
 		ROOT = lowerPlace;
-	upperPlace->SetParent(lowerPlace);
+	upperPlace->Parent = lowerPlace;
 
 	if (lowerPlace->GetBalance() > 0)
 	{
@@ -124,13 +124,13 @@ void AVL::BalanceAdding(Node* place) {
 	Node* grandParent;
 	Node* changedNode;
 	Node* currentNode = place;
-	for (Node* currentParent = currentNode->GetParent(); currentParent != nullptr; currentParent = currentNode->GetParent())
+	for (Node* currentParent = currentNode->Parent; currentParent != nullptr; currentParent = currentNode->Parent)
 	{
-		if (currentNode == currentParent->GetRightChild())
+		if (currentNode == currentParent->RightChild)
 		{
 			if (currentParent->GetBalance() > 0)
 			{
-				grandParent = currentParent->GetParent();
+				grandParent = currentParent->Parent;
 				if (currentNode->GetBalance() < 0)
 				{
 					changedNode = this->RightLeftRotate(currentParent, currentNode);
@@ -159,7 +159,7 @@ void AVL::BalanceAdding(Node* place) {
 		{
 			if (currentParent->GetBalance() < 0)
 			{
-				grandParent = currentParent->GetParent();
+				grandParent = currentParent->Parent;
 				if (currentNode->GetBalance() > 0)
 				{
 					changedNode = this->LeftRightRotate(currentParent, currentNode);
@@ -185,13 +185,13 @@ void AVL::BalanceAdding(Node* place) {
 			}
 		}
 
-		changedNode->SetParent(grandParent);
+		changedNode->Parent = grandParent;
 		if (grandParent != nullptr)
 		{
-			if (currentParent == grandParent->GetLeftChild())
-				grandParent->SetLeftChild(changedNode);
+			if (currentParent == grandParent->LeftChild)
+				grandParent->LeftChild = changedNode;
 			else
-				grandParent->SetRightChild(changedNode);
+				grandParent->RightChild = changedNode;
 			break;
 		}
 		else
@@ -206,14 +206,14 @@ void AVL::BalanceRemoving(Node * place) {
 	int currentBalance;
 	Node* grandParent;
 	Node* sibling;
-	for (Node* currentParent = place->GetParent(); currentParent != nullptr; currentParent = grandParent)
+	for (Node* currentParent = place->Parent; currentParent != nullptr; currentParent = grandParent)
 	{
-		grandParent = currentParent->GetParent();
-		if (place == currentParent->GetLeftChild())
+		grandParent = currentParent->Parent;
+		if (place == currentParent->LeftChild)
 		{
 			if (currentParent->GetBalance() > 0)
 			{
-				sibling = currentParent->GetRightChild();
+				sibling = currentParent->RightChild;
 				currentBalance = sibling->GetBalance();
 				if (currentBalance < 0)
 					place = RightLeftRotate(currentParent, sibling);
@@ -239,7 +239,7 @@ void AVL::BalanceRemoving(Node * place) {
 		{
 			if (currentParent->GetBalance() < 0)
 			{
-				sibling = currentParent->GetLeftChild();
+				sibling = currentParent->LeftChild;
 				currentBalance = sibling->GetBalance();
 				if (currentBalance > 0)
 					place = LeftRightRotate(currentParent, sibling);
@@ -261,13 +261,13 @@ void AVL::BalanceRemoving(Node * place) {
 			}
 		}
 
-		place->SetParent(grandParent);
+		place->Parent = grandParent;
 		if (grandParent != nullptr)
 		{
-			if (currentParent == grandParent->GetLeftChild())
-				grandParent->SetLeftChild(place);
+			if (currentParent == grandParent->LeftChild)
+				grandParent->LeftChild = place;
 			else
-				grandParent->SetRightChild(place);
+				grandParent->RightChild = place;
 			if (currentBalance == 0)
 				break;
 		}
@@ -292,24 +292,24 @@ void AVL::Add(unsigned int num, unsigned int index) {
 		while(true)
 			if (*currentNode < *addedNode)
 			{
-				if (currentNode->GetRightChild() != nullptr)
-					currentNode = currentNode->GetRightChild();
+				if (currentNode->RightChild != nullptr)
+					currentNode = currentNode->RightChild;
 				else
 				{
-					addedNode->SetParent(currentNode);
-					currentNode->SetRightChild(addedNode);
+					addedNode->Parent = currentNode;
+					currentNode->RightChild = addedNode;
 					this->BalanceAdding(addedNode);
 					break;
 				}
 			}
 			else if (*currentNode > *addedNode)
 			{
-				if (currentNode->GetLeftChild() != nullptr)
-					currentNode = currentNode->GetLeftChild();
+				if (currentNode->LeftChild != nullptr)
+					currentNode = currentNode->LeftChild;
 				else
 				{
-					currentNode->SetLeftChild(addedNode);
-					addedNode->SetParent(currentNode);
+					currentNode->LeftChild = addedNode;
+					addedNode->Parent = currentNode;
 					this->BalanceAdding(addedNode);
 					break;
 				}
@@ -332,8 +332,8 @@ unsigned int AVL::GetMax() {
 		return 0;
 	else
 	{
-		while (currentNode->GetRightChild() != nullptr)
-			currentNode = currentNode->GetRightChild();
+		while (currentNode->RightChild != nullptr)
+			currentNode = currentNode->RightChild;
 		return currentNode->GetValue();
 	}
 }
@@ -344,8 +344,8 @@ unsigned int AVL::GetMin() {
 		return 0;
 	else
 	{
-		while (currentNode->GetLeftChild() != nullptr)
-			currentNode = currentNode->GetLeftChild();
+		while (currentNode->LeftChild != nullptr)
+			currentNode = currentNode->LeftChild;
 		return currentNode->GetValue();
 	}
 }
@@ -354,23 +354,23 @@ unsigned int AVL::PopMax() {
 	Node* currentNode = ROOT;
 	Node* leftChildNode;
 	unsigned int index;
-	while (currentNode->GetRightChild() != nullptr)
-		currentNode = currentNode->GetRightChild();
+	while (currentNode->RightChild != nullptr)
+		currentNode = currentNode->RightChild;
 	if (currentNode->GetSize() < 2)
 	{
 		this->BalanceRemoving(currentNode);
-		leftChildNode = currentNode->GetLeftChild();
+		leftChildNode = currentNode->LeftChild;
 		if (currentNode == ROOT)
 		{
 			ROOT = leftChildNode;
 			if (leftChildNode != nullptr)
-				leftChildNode->SetParent(nullptr);
+				leftChildNode->Parent = nullptr;
 		}
 		else
 		{
 			if (leftChildNode != nullptr)
-				leftChildNode->SetParent(currentNode->GetParent());
-			currentNode->GetParent()->SetRightChild(leftChildNode);
+				leftChildNode->Parent = currentNode->Parent;
+			currentNode->Parent->RightChild = leftChildNode;
 		}
 		index = currentNode->Pop();
 		delete currentNode;
@@ -384,23 +384,23 @@ unsigned int AVL::PopMin() {
 	Node* currentNode = ROOT;
 	Node* rightChildNode;
 	unsigned int index;
-	while (currentNode->GetLeftChild() != nullptr)
-		currentNode = currentNode->GetLeftChild();
+	while (currentNode->LeftChild != nullptr)
+		currentNode = currentNode->LeftChild;
 	if (currentNode->GetSize() < 2)
 	{
 		this->BalanceRemoving(currentNode);
-		rightChildNode = currentNode->GetRightChild();
+		rightChildNode = currentNode->RightChild;
 		if (currentNode == ROOT)
 		{
 			ROOT = rightChildNode;
 			if (rightChildNode != nullptr)
-				rightChildNode->SetParent(nullptr);
+				rightChildNode->Parent = nullptr;
 		}
 		else
 		{
 			if (rightChildNode != nullptr)
-				rightChildNode->SetParent(currentNode->GetParent());
-			currentNode->GetParent()->SetLeftChild(rightChildNode);
+				rightChildNode->Parent = currentNode->Parent;
+			currentNode->Parent->LeftChild = rightChildNode;
 		}
 		index = currentNode->Pop();
 		delete currentNode;

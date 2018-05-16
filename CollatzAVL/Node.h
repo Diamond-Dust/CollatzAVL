@@ -2,14 +2,13 @@
 #include "PQ.h"
 
 class Node {
-	private:
+	public:
 		Node* Parent;
 		Node* LeftChild;
 		Node* RightChild;
 		int Balance;
 		unsigned int Value;
 		PQ Indexes;
-	public:
 		Node(unsigned int value, unsigned int index);
 		Node(const Node& right);
 		Node& operator=(const Node& right);
