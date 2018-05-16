@@ -6,23 +6,14 @@ Node::Node(unsigned int value, unsigned int index) {
 	this->RightChild = nullptr;
 	this->Balance = 0;
 	this->Value = value;
-	this->Indexes.Add(&QNode(index));
+	this->Indexes.Add(index);
 }
 
 Node::Node(const Node & right) : Balance(right.Balance), Value(right.Value) {
 	this->Indexes = right.Indexes;
-	if (right.Parent != nullptr)
-		this->Parent = new Node(*right.Parent);
-	else
-		this->Parent = nullptr;
-	if (right.RightChild != nullptr)
-		this->RightChild = new Node(*right.RightChild);
-	else
-		this->RightChild = nullptr;
-	if (right.LeftChild != nullptr)
-		this->LeftChild = new Node(*right.LeftChild);
-	else
-		this->LeftChild = nullptr;
+	this->Parent = right.Parent;
+	this->RightChild = right.RightChild;
+	this->LeftChild = right.LeftChild;
 }
 
 Node & Node::operator=(const Node & right) {
@@ -30,20 +21,11 @@ Node & Node::operator=(const Node & right) {
 	this->Value = right.Value;
 	this->Indexes = right.Indexes;
 	delete this->Parent;
-	if (right.Parent != nullptr)
-		this->Parent = new Node(*right.Parent);
-	else
-		this->Parent = nullptr;
+	this->Parent = right.Parent;
 	delete this->RightChild;
-	if (right.RightChild != nullptr)
-		this->RightChild = new Node(*right.RightChild);
-	else
-		this->RightChild = nullptr;
+	this->RightChild = right.RightChild;
 	delete this->LeftChild;
-	if (right.LeftChild != nullptr)
-		this->LeftChild = new Node(*right.LeftChild);
-	else
-		this->LeftChild = nullptr;
+	this->LeftChild = right.LeftChild;
 	return *this;
 }
 

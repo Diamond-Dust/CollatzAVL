@@ -6,34 +6,22 @@ QNode::QNode(unsigned int index) {
 }
 
 QNode::QNode(const QNode & right) : Index(right.Index) {
-	if (right.next != nullptr)
-		this->next = right.next;
-	else
-		this->next = nullptr;
+	this->next = right.next;
 }
 
 QNode & QNode::operator=(const QNode & right) {
 	this->Index = right.Index;
 	delete this->next;
-	if (right.next != nullptr)
-		this->next = right.next;
-	else
-		this->next = nullptr;
+	this->next = right.next;
 	return *this;
 }
 
 bool QNode::operator>(const QNode & right) {
-	if (this->Index > right.Index)
-		return true;
-	else
-		return false;
+	return (this->Index > right.Index);
 }
 
 bool QNode::operator<(const QNode & right) {
-	if (this->Index < right.Index)
-		return true;
-	else
-		return false;
+	return (this->Index < right.Index);
 }
 
 unsigned int QNode::GetIndex() {
@@ -41,6 +29,5 @@ unsigned int QNode::GetIndex() {
 }
 
 QNode::~QNode() {
-	if (this->next != nullptr)
-		delete this->next;
+	delete this->next;
 }
